@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala da Mídia</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+        .evento { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
+        .btn { background-color: #007BFF; color: white; padding: 10px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h1>Escala da Mídia - Eventos</h1>
+    <p>Selecione os dias que você pode servir:</p>
+
+    {% for evento in eventos %}
+        <div class="evento">
+            <h3>{{ evento.nome }}</h3>
+            <p><strong>Data:</strong> {{ evento.data|date:"d/m/Y às H:i" }}</p>
+            
+            <p><strong>Vagas Restantes:</strong> {{ evento.vagas_restantes }} de {{ evento.vagas_midia }}</p>
+            
+            {% if evento.vagas_restantes > 0 %}
+                <a href="{% url 'voluntariar' evento.id %}" class="btn">Me voluntariar</a>
+            {% else %}
+                <p style="color: red; font-weight: bold;">Escala Completa! ✅</p>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>Nenhum evento cadastrado para os próximos dias.</p>
+    {% endfor %}
+
+</body>
+</html>

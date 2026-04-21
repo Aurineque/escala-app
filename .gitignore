@@ -1,0 +1,14 @@
+# Ambiente Virtual
+venv/
+env/
+
+# Arquivos temporários do Python
+__pycache__/
+*.pyc
+
+# Banco de dados local (Opcional, mas recomendado)
+db.sqlite3
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
