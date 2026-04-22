@@ -8,10 +8,22 @@
         body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
         .evento { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 8px; }
         .btn { background-color: #007BFF; color: white; padding: 10px; text-decoration: none; border-radius: 5px; }
+        
+        /* Estilos dos alertas que adicionamos agora */
+        .alert { padding: 15px; margin-bottom: 20px; border-radius: 5px; font-weight: bold; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
     </style>
 </head>
 <body>
 
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     <h1>Escala da Mídia - Eventos</h1>
     <p>Selecione os dias que você pode servir:</p>
 

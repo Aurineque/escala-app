@@ -7,10 +7,21 @@
         body { font-family: Arial, sans-serif; padding: 20px; max-width: 400px; margin: auto; }
         .btn-salvar { background-color: #28a745; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
         .btn-voltar { background-color: #6c757d; color: white; padding: 10px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 10px;}
+        
+        /* Estilos dos alertas */
+        .alert { padding: 15px; margin-bottom: 20px; border-radius: 5px; font-weight: bold; }
+        .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
     </style>
 </head>
 <body>
 
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     <h2>Servir no: {{ evento.nome }}</h2>
     <p>Data: {{ evento.data|date:"d/m/Y às H:i" }}</p>
 
