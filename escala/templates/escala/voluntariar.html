@@ -11,6 +11,45 @@
         /* Estilos dos alertas */
         .alert { padding: 15px; margin-bottom: 20px; border-radius: 5px; font-weight: bold; }
         .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        select {
+            width: 100%;        /* Faz a caixa de seleção esticar até os limites da tela */
+            padding: 12px;      /* Deixa a caixa mais 'gordinha', fácil de clicar no celular */
+            font-size: 16px;    /* Aumenta a letra dos nomes da equipe */
+            border: 1px solid #ccc;
+            border-radius: 5px; /* Deixa as bordas arredondadas */
+            margin-bottom: 15px;/* Dá um espacinho embaixo para não colar no botão */
+            box-sizing: border-box; 
+        }
+        .botoes-container {
+            display: flex;
+            gap: 10px; /* Cria um espaço de 10 pixels entre os botões */
+            margin-top: 20px;
+        }
+
+        .botoes-container button,
+        .botoes-container a {
+            flex: 1; /* A mágica acontece aqui: manda eles dividirem 50% / 50% */
+            padding: 12px;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none; /* Remove o sublinhado se o botão for um link <a> */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        /* Opcional: Dando uma cor diferente para cada botão */
+        .botoes-container button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+        }
+
+        .botoes-container a {
+            background-color: #f8f9fa;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -22,14 +61,17 @@
             </div>
         {% endfor %}
     {% endif %}
-    <h2>Servir no: {{ evento.nome }}</h2>
+    <h1>Servir no: {{ evento.nome }}</h1>
     <p>Data: {{ evento.data|date:"d/m/Y às H:i" }}</p>
 
-    <form method="POST">
-        {% csrf_token %} {{ form.as_p }}  <button type="submit" class="btn-salvar">Confirmar Presença</button>
+   <form method="POST">
+        {% csrf_token %} 
+        {{ form.as_p }}  
+        
+        <div class="botoes-container">
+            <a href="{% url 'lista_eventos' %}">Voltar</a>
+            <button type="submit">Confirmar Presença</button>
+        </div>
     </form>
-
-    <a href="{% url 'lista_eventos' %}" class="btn-voltar">Voltar</a>
-
 </body>
 </html>
