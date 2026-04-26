@@ -30,7 +30,7 @@
     {% for evento in eventos %}
         <div class="evento">
             <h3>{{ evento.nome }}</h3>
-            <p><strong>Data:</strong> {{ evento.data|date:"d/m/Y às H:i" }}</p>
+            <p><strong>Data:</strong> {{ evento.data|date:"d/m/Y à\s H:i" }}</p>
             
             <p><strong>Vagas Restantes:</strong> {{ evento.vagas_restantes }} de {{ evento.vagas_midia }}</p>
             {% if evento.escala_set.all %}
