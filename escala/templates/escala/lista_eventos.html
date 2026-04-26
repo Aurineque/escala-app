@@ -33,6 +33,16 @@
             <p><strong>Data:</strong> {{ evento.data|date:"d/m/Y às H:i" }}</p>
             
             <p><strong>Vagas Restantes:</strong> {{ evento.vagas_restantes }} de {{ evento.vagas_midia }}</p>
+            {% if evento.escala_set.all %}
+                <p>
+                    <strong>Membros Escalados: </strong>
+                    {% for escala in evento.escala_set.all %}
+                        {{ escala.membro.nome }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+            {% else %}
+                <p style="color: #999; font-style: italic;">Ninguém escalado ainda. Seja o primeiro!</p>
+            {% endif %}
             
             {% if evento.vagas_restantes > 0 %}
                 <a href="{% url 'voluntariar' evento.id %}" class="btn">Me voluntariar</a>
