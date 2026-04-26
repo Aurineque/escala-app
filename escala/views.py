@@ -2,9 +2,17 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages # Importamos o "mensageiro" do Django
 from .models import Evento, Escala  # Precisamos importar a Escala aqui também
 from .forms import EscalaForm
+from django.utils import timezone  # Precisamos disso para saber a data de hoje
 
 def lista_eventos(request):
-    eventos = Evento.objects.all().order_by('data')
+    agora = timezone.now()
+    
+    # Filtramos onde o mês e o ano da 'data' sejam iguais aos atuais
+    eventos = Evento.objects.filter(
+        data__month=agora.month,
+        data__year=agora.year
+    ).order_by('data') # Mantém a ordem cronológica
+    
     return render(request, 'escala/lista_eventos.html', {'eventos': eventos})
 
 def voluntariar(request, evento_id):
