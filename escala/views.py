@@ -37,7 +37,7 @@ def voluntariar(request, evento_id):
             ).count()
             
             if escalas_no_mes >= 6:
-                messages.error(request, f"{membro.nome} já atingiu o limite de 3 escalas para este mês!")
+                messages.error(request, f"{membro.nome} já atingiu o limite de 6 escalas para este mês!")
                 return redirect('voluntariar', evento_id=evento.id) 
             
             # --- Se passou pelos dois bloqueios, salva com sucesso ---

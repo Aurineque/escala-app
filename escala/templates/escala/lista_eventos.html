@@ -37,7 +37,7 @@
                 <p>
                     <strong>Membros Escalados: </strong>
                     {% for escala in evento.escala_set.all %}
-                        {{ escala.membro.nome }}{% if not forloop.last %}, {% endif %}
+                        {{ escala.membro.nome }}({{ escala.get_funcao_display }}){% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </p>
             {% else %}

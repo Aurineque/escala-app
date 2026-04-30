@@ -24,8 +24,8 @@ class Membro(models.Model):
     # Opções de funções para a mídia
     FUNCOES = [
         ('camera', 'Câmera'),
-        ('som', 'Mesa de Som'),
-        ('projecao', 'Projeção / Letras'),
+        ('story', 'Story'),
+        ('projecao', 'Projeção'),
         ('geral', 'Apoio Geral')
     ]
     nome = models.CharField(max_length=100)
@@ -39,6 +39,12 @@ class Escala(models.Model):
     evento = models.ForeignKey(Evento, on_delete=models.CASCADE)
     membro = models.ForeignKey(Membro, on_delete=models.CASCADE)
     confirmado = models.BooleanField(default=False)
+
+    funcao = models.CharField(
+        max_length=20, 
+        choices=Membro.FUNCOES, 
+        default='geral'
+    )
 
     class Meta:
         # Impede que o mesmo membro marque duas vezes no mesmo dia
