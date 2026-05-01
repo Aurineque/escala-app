@@ -3,37 +3,51 @@ from django.contrib import messages # Importamos o "mensageiro" do Django
 from .models import Evento, Escala  # Precisamos importar a Escala aqui também
 from .forms import EscalaForm
 from django.utils import timezone  # Precisamos disso para saber a data de hoje
+import calendar # Importamos a biblioteca de calendário do Python para descobrir o último dia do mês que vem
 
 def lista_eventos(request):
     agora = timezone.now()
     
-    # 1. Definimos o início: dia 1º do mês atual, à meia-noite
-    inicio_mes = agora.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    
-    # 2. Descobrimos qual é o próximo mês (com proteção para a virada de ano!)
-    if agora.month == 12:
-        mes_que_vem = 1
-        ano_que_vem = agora.year + 1
-    else:
-        mes_que_vem = agora.month + 1
-        ano_que_vem = agora.year
+    # CAMINHO 1: Antes do dia 25, mostra apenas o mês atual normalmente
+    if agora.day < 25:
+        eventos = Evento.objects.filter(
+            data__month=agora.month,
+            data__year=agora.year
+        ).order_by('data')
         
-    # 3. Definimos o limite: dia 7 do próximo mês, no finalzinho do dia
-    limite_dias = agora.replace(
-        year=ano_que_vem, 
-        month=mes_que_vem, 
-        day=7, 
-        hour=23, 
-        minute=59, 
-        second=59
-    )
-    
-    # 4. Filtramos criando um "sanduíche" de datas
-    eventos = Evento.objects.filter(
-        data__gte=inicio_mes,   # gte = Greater Than or Equal (Maior ou igual ao dia 1º)
-        data__lte=limite_dias   # lte = Less Than or Equal (Menor ou igual ao dia 7 do proximo mês)
-    ).order_by('data')
-    
+    # CAMINHO 2: Do dia 25 em diante, mostra do dia 25 até o fim do mês seguinte
+    else:
+        # Descobre qual é o próximo mês e ano (cuidando da virada de Dezembro)
+        if agora.month == 12:
+            mes_que_vem = 1
+            ano_que_vem = agora.year + 1
+        else:
+            mes_que_vem = agora.month + 1
+            ano_que_vem = agora.year
+            
+        # Pega o dia 25 do mês atual, à meia-noite
+        inicio_janela = agora.replace(day=25, hour=0, minute=0, second=0, microsecond=0)
+        
+        # A mágica do 'calendar': ele devolve o último dia do mês que pedirmos!
+        # O [1] ali no final serve para pegar apenas o número de dias (ex: 30 ou 31)
+        ultimo_dia_mes_que_vem = calendar.monthrange(ano_que_vem, mes_que_vem)[1]
+        
+        # Monta a data limite exata: último dia do mês que vem, às 23:59:59
+        fim_janela = agora.replace(
+            year=ano_que_vem, 
+            month=mes_que_vem, 
+            day=ultimo_dia_mes_que_vem, 
+            hour=23, 
+            minute=59, 
+            second=59
+        )
+        
+        # Filtra como um sanduíche: maior ou igual ao início, e menor ou igual ao fim
+        eventos = Evento.objects.filter(
+            data__gte=inicio_janela,
+            data__lte=fim_janela
+        ).order_by('data')
+        
     return render(request, 'escala/lista_eventos.html', {'eventos': eventos})
 
 def voluntariar(request, evento_id):
