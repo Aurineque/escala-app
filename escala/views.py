@@ -7,11 +7,32 @@ from django.utils import timezone  # Precisamos disso para saber a data de hoje
 def lista_eventos(request):
     agora = timezone.now()
     
-    # Filtramos onde o mês e o ano da 'data' sejam iguais aos atuais
+    # 1. Definimos o início: dia 1º do mês atual, à meia-noite
+    inicio_mes = agora.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    
+    # 2. Descobrimos qual é o próximo mês (com proteção para a virada de ano!)
+    if agora.month == 12:
+        mes_que_vem = 1
+        ano_que_vem = agora.year + 1
+    else:
+        mes_que_vem = agora.month + 1
+        ano_que_vem = agora.year
+        
+    # 3. Definimos o limite: dia 7 do próximo mês, no finalzinho do dia
+    limite_dias = agora.replace(
+        year=ano_que_vem, 
+        month=mes_que_vem, 
+        day=7, 
+        hour=23, 
+        minute=59, 
+        second=59
+    )
+    
+    # 4. Filtramos criando um "sanduíche" de datas
     eventos = Evento.objects.filter(
-        data__month=agora.month,
-        data__year=agora.year
-    ).order_by('data') # Mantém a ordem cronológica
+        data__gte=inicio_mes,   # gte = Greater Than or Equal (Maior ou igual ao dia 1º)
+        data__lte=limite_dias   # lte = Less Than or Equal (Menor ou igual ao dia 7 do proximo mês)
+    ).order_by('data')
     
     return render(request, 'escala/lista_eventos.html', {'eventos': eventos})
 
@@ -19,7 +40,7 @@ def voluntariar(request, evento_id):
     evento = get_object_or_404(Evento, id=evento_id)
     
     if request.method == 'POST':
-        form = EscalaForm(request.POST) # Lembre-se de usar o nome correto do seu form
+        form = EscalaForm(request.POST)
         
         if form.is_valid():
             membro = form.cleaned_data['membro']
