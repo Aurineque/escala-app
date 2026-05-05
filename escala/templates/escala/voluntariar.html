@@ -62,7 +62,7 @@
         {% endfor %}
     {% endif %}
     <h1>Servir no: {{ evento.nome }}</h1>
-    <p>Data: {{ evento.data|date:"d/m/Y às H:i" }}</p>
+    <p>Data: {{ evento.data|date:"d/m/Y à\s H:i" }}</p>
 
    <form method="POST">
         {% csrf_token %} 
