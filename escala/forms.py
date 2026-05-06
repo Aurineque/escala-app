@@ -6,3 +6,7 @@ class EscalaForm(forms.ModelForm):
         model = Escala
 
         fields = ['membro','funcao']
+        labels = {
+            'funcao': 'Função',
+            'membro': 'Selecione o Voluntário', 
+        }
