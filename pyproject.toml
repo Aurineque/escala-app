@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+exclude = [
+    "venv",
+    ".git",
+    "__pycache__",
+    "**/migrations",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors — erros de estilo (ex: espaço sobrando)
+    "F",    # pyflakes — variável não usada, import sem uso
+    "W",    # pycodestyle warnings — avisos de estilo
+    "I",    # isort — ordenação de imports
+    "N",    # naming — convenção de nomes (snake_case, etc)
+    "UP",   # pyupgrade — código moderno (Python 3.12)
+    "B",    # flake8-bugbear — encontra bugs de verdade
+    "SIM",  # flake8-simplify — sugere código mais simples
+]
+
+ignore = [
+    "E501",   # linha muito longa — relaxamos um pouco pra não atrapalhar
+    "N802",   # nome de função com maiúscula — necessário no Django (ex: get_FOO_display)
+    "N803",   # nome de argumento com maiúscula — às vezes necessário
+    "N806",   # nome de variável com maiúscula — necessário em constantes
+    "B008",   # chamada de função em default de campo — comum em Django models
+    "B904",   # raise sem from em except — nem sempre aplicável
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/migrations/*" = ["E", "F", "W", "I", "N", "UP", "B", "SIM"]
+"**/settings.py" = ["E501"]
+"**/tests.py" = ["N802", "N803"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+line-ending = "lf"
