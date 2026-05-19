@@ -26,10 +26,12 @@ class ListaEventosViewTest(TestCase):
     def test_lista_eventos_ordenados_por_data(self, mock_now):
         mock_now.return_value = datetime(2026, 6, 15, 10, 0, 0, tzinfo=UTC)
         Evento.objects.create(
-            nome='Segundo', data=datetime(2026, 6, 15, 19, 0, 0, tzinfo=UTC),
+            nome='Segundo',
+            data=datetime(2026, 6, 15, 19, 0, 0, tzinfo=UTC),
         )
         Evento.objects.create(
-            nome='Primeiro', data=datetime(2026, 6, 10, 19, 0, 0, tzinfo=UTC),
+            nome='Primeiro',
+            data=datetime(2026, 6, 10, 19, 0, 0, tzinfo=UTC),
         )
         response = self.client.get('/')
         eventos = response.context['eventos']
