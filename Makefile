@@ -1,14 +1,16 @@
+PYTHON = venv/Scripts/python.exe
+
 .PHONY: lint format test run migrate install docker-build docker-up
 
 help:
-	@echo "Comandos disponíveis:"
+	@echo "Comandos disponiveis:"
 	@echo "  make lint        — Roda o Ruff como fiscal (lint)"
-	@echo "  make format      — Roda o Ruff como arquiteto (formata automático)"
+	@echo "  make format      — Roda o Ruff como arquiteto (formata automatico)"
 	@echo "  make test        — Roda todos os testes do Django"
 	@echo "  make run         — Sobe o servidor local"
-	@echo "  make migrate     — Aplica migrações do banco"
-	@echo "  make install     — Instala as dependências"
-	@echo "  make docker-build — Constrói a imagem Docker"
+	@echo "  make migrate     — Aplica migracoes do banco"
+	@echo "  make install     — Instala as dependencias"
+	@echo "  make docker-build — Constroi a imagem Docker"
 	@echo "  make docker-up   — Sobe o container"
 
 lint:
@@ -18,13 +20,13 @@ format:
 	ruff format .
 
 test:
-	python manage.py test --verbosity=2
+	$(PYTHON) manage.py test --verbosity=2
 
 run:
-	python manage.py runserver 8080
+	$(PYTHON) manage.py runserver 8080
 
 migrate:
-	python manage.py migrate
+	$(PYTHON) manage.py migrate
 
 install:
 	pip install -r requirements.txt
