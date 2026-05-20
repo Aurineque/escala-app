@@ -9,6 +9,9 @@ __pycache__/
 # Banco de dados local (Opcional, mas recomendado)
 db.sqlite3
 
+# Arquivos estáticos coletados
+staticfiles/
+
 # Arquivos do sistema operacional
 .DS_Store
 Thumbs.db
