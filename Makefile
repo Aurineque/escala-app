@@ -1,4 +1,7 @@
-PYTHON = venv/Scripts/python.exe
+PYTHON := $(shell \
+	if python3 -c "import django" 2>/dev/null; then echo python3; \
+	elif python -c "import django" 2>/dev/null; then echo python; \
+	else echo venv/Scripts/python.exe; fi)
 
 .PHONY: lint format test run migrate install docker-build docker-up
 
