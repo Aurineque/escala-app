@@ -12,6 +12,9 @@ db.sqlite3
 # Arquivos estáticos coletados
 staticfiles/
 
+# Documentação interna (opencode)
+AGENTS.md
+
 # Arquivos do sistema operacional
 .DS_Store
 Thumbs.db
