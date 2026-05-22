@@ -118,3 +118,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Deploy webhook
+DJANGO_DEPLOY_TOKEN = os.getenv('DJANGO_DEPLOY_TOKEN', '')
+DJANGO_DEPLOY_SCRIPT = os.getenv('DJANGO_DEPLOY_SCRIPT', str(BASE_DIR / 'deploy.sh'))

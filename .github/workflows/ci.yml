@@ -32,3 +32,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: docker build -t escala-midia .
+
+  deploy:
+    needs: [lint, test, build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Chamar webhook de deploy
+        run: |
+          curl -s -X POST "https://Aurineque.pythonanywhere.com/deploy/" \
+            -H "X-Deploy-Token: ${{ secrets.DJANGO_DEPLOY_TOKEN }}" \
+            --max-time 180
+      - name: Verificar resultado
+        run: |
+          echo "Deploy disparado. Verifique o log em:"
+          echo "  https://Aurineque.pythonanywhere.com/deploy/"

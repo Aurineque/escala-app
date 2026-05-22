@@ -1,11 +1,15 @@
-import calendar  # Importamos a biblioteca de calendário do Python para descobrir o último dia do mês que vem
+import calendar
+import subprocess
 
-from django.contrib import messages  # Importamos o "mensageiro" do Django
+from django.conf import settings
+from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.utils import timezone  # Precisamos disso para saber a data de hoje
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import EscalaForm
-from .models import Escala, Evento  # Precisamos importar a Escala aqui também
+from .models import Escala, Evento
 
 
 def lista_eventos(request):
@@ -91,3 +95,32 @@ def voluntariar(request, evento_id):
         form = EscalaForm()
 
     return render(request, 'escala/voluntariar.html', {'form': form, 'evento': evento})
+
+
+@csrf_exempt
+def deploy_webhook(request):
+    if request.method != 'POST':
+        return JsonResponse({'erro': 'Apenas POST aceito'}, status=405)
+
+    token = request.META.get('HTTP_X_DEPLOY_TOKEN')
+    if not token or token != settings.DJANGO_DEPLOY_TOKEN:
+        return JsonResponse({'erro': 'Token invalido'}, status=403)
+
+    try:
+        resultado = subprocess.run(
+            ['bash', settings.DJANGO_DEPLOY_SCRIPT],
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        return JsonResponse(
+            {
+                'saida': resultado.stdout,
+                'erros': resultado.stderr,
+                'codigo': resultado.returncode,
+            }
+        )
+    except subprocess.TimeoutExpired:
+        return JsonResponse({'erro': 'Tempo limite excedido'}, status=504)
+    except Exception as e:
+        return JsonResponse({'erro': str(e)}, status=500)
