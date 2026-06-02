@@ -12,3 +12,7 @@ class EscalaForm(forms.ModelForm):
             'funcao': 'Função',
             'membro': 'Selecione o Voluntário',
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['membro'].queryset = self.fields['membro'].queryset.order_by('nome')
